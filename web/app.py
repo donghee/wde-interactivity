@@ -8,7 +8,7 @@ def index():
     return render_template('index.html')
 
 @app.route('/interactivity')
-def interactiviry():
+def interactivity():
     return f'<h4>{random.randint(80, 100)}</h4>'
 
 if __name__ == '__main__':
