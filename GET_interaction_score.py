@@ -49,7 +49,53 @@ def compare_value(df):
 
 ####### 3. 입력되는 결과값 그래프 그리기 #######
 
-def 
+#3-1. interaction force
+def inter_force_graph (df):
+
+    inter_force = df['Inter_Force']
+    plt.figure(figsize=(20,8))
+    x = np.arange(len(inter_force))
+    plt.grid(True, color = 'gray', linestyle = '--', linewidth =0.5)
+    plt.show()
+
+
+#3-2. interaction torque
+def torques_graph (df):
+
+    plt.figure(figsize=(20,8))
+    x = np.arange(len(inter_torque))
+
+    inter_torque = df['Inter_Torque']
+    gravity_torque = df['Gravity_Torque']
+    motor_torque = df['Motor_Torque']
+
+    plt.grid(True, color = 'gray', linestyle = '--', linewidth =0.5)
+
+    plt.legend()
+
+    plt.title('Torques')
+    plt.xlabel('Time', color='white')
+    plt.xlabel('Torques (N.m)', color='white')
+    plt.show()
+
+#3-3. human torque
+def human_torque_graph (df):
+
+    plt.figure(figsize=(20,8))
+    x = np.arange(len(inter_torque))
+
+    human_torque = df['Human_Torque']
+
+    plt.grid(True, color = 'gray', linestyle = '--', linewidth =0.5)
+
+    plt.legend()
+
+    plt.title('Human Torque')
+    plt.xlabel('Time', color='white')
+    plt.xlabel('Humna Torque (N.m)', color='white')
+    plt.show()
+
+
 
 ####### 4. 최종 점수 구하기 #######
 def main(df):
@@ -58,6 +104,11 @@ def main(df):
     total_score = column_values.mean()  
 
     print('Interactivitiy Score is '+ str(total_score))
+    
+    inter_force_graph (df)
+    torques_graph(df)
+    human_torque_graph (df)
+
 
 def test_interactivity():
     print('Interactivitiy Score is 90')
