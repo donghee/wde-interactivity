@@ -239,10 +239,11 @@ def main():
     #3 파일 형태로 저장하기
     repeat_data.to_csv('result_repeat.csv', index = False)
     
-    print('REPEAT TABLE SAVED')
+    print('REPEAT TABLE SAVEDD')
 
 
 
 if __name__ == '__main__':
     main()
+    
 
