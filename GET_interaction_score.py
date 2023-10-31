@@ -47,7 +47,11 @@ def compare_value(df):
     return df_input
 
 
-####### 3. 최종 점수 구하기 #######
+####### 3. 입력되는 결과값 그래프 그리기 #######
+
+def 
+
+####### 4. 최종 점수 구하기 #######
 def main(df):
 
     column_values = df['Filtered_Score']  
