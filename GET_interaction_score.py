@@ -26,20 +26,20 @@ def get_survey_data(file_path):
 
 ####### 2. 각 조건마다 점수 비교하기 #######
 
-def compare_value(df):
+def compare_value(df_input):
 
     #range 에 대한 비교 파일
-    df_evaluation = pd.read_csv('file for comparing.csv')
+    df_evaluation = pd.read_csv('Evaluation_Table.csv')
 
     #Angle, State마다 range 에 어느정도 들어오는지 비교하기
     #Angle, State마다 점수 매기기
 
     # df_input에 'Range_0', 'Range_1'을 추가한다.
-    df_input = pd.merge(df_input, df_evaluation[['State', 'Angle', 'Filtered_New_Range_0', 'Filtered_New_Range_1']], 
+    df_input = pd.merge(df_input, df_evaluation[['State', 'Angle', 'New_Range_0', 'New_Range_1']], 
                     on=['State', 'Angle'], how='left')
 
     # Human_Torque 값을 Range_0과 Range_1 사이의 상대적 위치에 따라 0에서 1 사이로 정규화한다.
-    df_input['Filtered_Score'] = (df_input['Human_Torque'] - df_input['Filtered_New_Range_0']) / (df_input['Filtered_New_Range_1'] - df_input['Filtered_New_Range_0'])
+    df_input['Filtered_Score'] = (df_input['Human_Torque'] - df_input['New_Range_0']) / (df_input['New_Range_1'] - df_input['New_Range_0'])
 
     # Score 값이 0보다 작으면 0으로, 1보다 크면 1로 설정한다.
     df_input['Filtered_Score'] = df_input['Filtered_Score'].clip(0, 1)
@@ -63,9 +63,11 @@ def inter_force_graph (df):
 def torques_graph (df):
 
     plt.figure(figsize=(20,8))
+    inter_torque = df['Inter_Torque']
+    
     x = np.arange(len(inter_torque))
 
-    inter_torque = df['Inter_Torque']
+    
     gravity_torque = df['Gravity_Torque']
     motor_torque = df['Motor_Torque']
 
@@ -82,6 +84,7 @@ def torques_graph (df):
 def human_torque_graph (df):
 
     plt.figure(figsize=(20,8))
+    inter_torque = df['Inter_Torque']
     x = np.arange(len(inter_torque))
 
     human_torque = df['Human_Torque']
@@ -98,8 +101,13 @@ def human_torque_graph (df):
 
 
 ####### 4. 최종 점수 구하기 #######
-def main(df):
+def main():
 
+    file_path = 'result_human.csv'
+    df = pd.read_csv(file_path)
+    
+    df = compare_value(df)
+    
     column_values = df['Filtered_Score']  
     total_score = column_values.mean()  
 
