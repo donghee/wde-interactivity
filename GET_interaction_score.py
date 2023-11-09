@@ -140,6 +140,41 @@ def human_torque_graph (df, df_evaluate):
     plt.ylabel('Human Torque (N.m)')
     plt.legend()
     plt.show()
+    
+def combined_torques_graph(df, df_evaluate):
+    df_evaluate = map_motion_percent(df_evaluate)
+    df = df.sort_values('Motion')
+    df_evaluate = df_evaluate.sort_values('Motion')
+
+    plt.figure(figsize=(15, 10))
+
+    # 첫 번째 서브플롯 (상단)
+    plt.subplot(2, 1, 1)  # 2행 1열로 배치, 첫 번째 서브플롯
+    inter_torque = df['Inter_Torque'] / 10197.162
+    plt.plot(df['Motion'], inter_torque, label='Interaction Torque', color='green')
+    plt.plot(df['Motion'], df['Motor_Torque'], label='Motor Torque', color='blue')
+    plt.plot(df['Motion'], df['Human_Torque'],  label='Human Torque',color='red')
+
+    plt.grid(True, color='gray', linestyle='--', linewidth=0.5)
+    plt.ylim(-3, 2)
+    plt.xlabel('A motion (%)')
+    plt.ylabel('Torques (N.m)')
+    plt.legend()
+
+    # 두 번째 서브플롯 (하단)
+    plt.subplot(2, 1, 2)  # 2행 1열로 배치, 두 번째 서브플롯
+    plt.plot(df_evaluate['Motion'], df_evaluate['New_Range_0'], label='0', color='grey')
+    plt.plot(df_evaluate['Motion'], df_evaluate['New_Range_1'], label='1', color='grey')
+    plt.plot(df['Motion'], df['Human_Torque'], label='Human Torque', color='red')
+
+    plt.grid(True, color='gray', linestyle='--', linewidth=0.5)
+    plt.ylim(-7, 2)
+    plt.xlabel('A motion (%)')
+    plt.ylabel('Human Torque (N.m)')
+    plt.legend()
+
+    plt.tight_layout()  # 서브플롯 간의 간격 조정
+    plt.show()
 
 
 ####### 4. 최종 점수 구하기 #######
@@ -160,8 +195,8 @@ def main():
     print('Interactivitiy Score is '+ str(total_score))
     
     #inter_force_graph (df)
-    torques_graph(df_number)
-    human_torque_graph (df_number, df_evaluate)
+    #torques_graph(df_number)
+    combined_torques_graph (df_number, df_evaluate)
 
 
 if __name__ == '__main__':
