@@ -6,6 +6,8 @@ import os
 import glob
 from scipy.signal import butter, filtfilt
 
+from io import BytesIO
+
 ####### 1. 최종 데이터 가져오기 #######
 
 def get_final_data(file_path):
@@ -174,7 +176,14 @@ def combined_torques_graph(df, df_evaluate):
     plt.legend()
 
     plt.tight_layout()  # 서브플롯 간의 간격 조정
-    plt.show()
+    #plt.show()
+
+    torquegraph_img = BytesIO()
+    plt.savefig(torquegraph_img, format='png', dpi=72)
+    plt.clf()
+    torquegraph_img.seek(0)
+
+    return torquegraph_img
 
 
 ####### 4. 최종 점수 구하기 #######
