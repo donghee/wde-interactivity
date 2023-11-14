@@ -4,7 +4,7 @@ import pandas as pd
 import sys
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
-from GET_interaction_score import compare_value, combined_torques_graph
+from GET_interaction_score_exhibition import compare_value, combined_torques_graph, map_motion_percent
 
 app = Flask(__name__)
 
@@ -30,37 +30,28 @@ def index():
 
 @app.route('/score')
 def score():
-    file_path = (os.path.dirname(os.path.realpath(__file__)) + "/../" +
-                 "(0724)(on_move) result_human.csv")
-    evaluate_file_path = (os.path.dirname(os.path.realpath(__file__)) +
-                          "/../" + "Evaluation_Table2.csv")
+    file_path = os.path.dirname(os.path.realpath(__file__)) + "/../" + 'interaction_control_node_1.csv'
     df = pd.read_csv(file_path)
+    df = map_motion_percent(df)
+    df = df.sort_values('Motion')
+
+    evaluate_file_path = os.path.dirname(os.path.realpath(__file__)) + "/../" + 'Evaluation_Table2.csv' 
     df_evaluate = pd.read_csv(evaluate_file_path)
-
-    # N번 사람 비교
-    df_number = df[df["Number"] == 10]
-    df_number = compare_value(df_number)
-
-    column_values = df_number["Filtered_Score"]
-    total_score = column_values.mean()
-
-    return f"{round(total_score,4)}"
+    total_score = compare_value(df)
+    
+    return f"{round(total_score,1)}"
 
 @app.route("/score/interactivity", methods=["GET"])
 def interactivity():
-    file_path = (os.path.dirname(os.path.realpath(__file__)) + "/../" +
-                 "(0724)(on_move) result_human.csv")
-    evaluate_file_path = (os.path.dirname(os.path.realpath(__file__)) +
-                          "/../" + "Evaluation_Table2.csv")
+    file_path = os.path.dirname(os.path.realpath(__file__)) + "/../" + 'interaction_control_node_1.csv'
     df = pd.read_csv(file_path)
+    df = map_motion_percent(df)
+    df = df.sort_values('Motion')
+
+    evaluate_file_path = os.path.dirname(os.path.realpath(__file__)) + "/../" + 'Evaluation_Table2.csv' 
     df_evaluate = pd.read_csv(evaluate_file_path)
-
-    # N번 사람 비교
-    df_number = df[df["Number"] == 10]
-    df_number = compare_value(df_number)
-
-    column_values = df_number["Filtered_Score"]
-    total_score = column_values.mean()
+    total_score = compare_value(df)
+    
     return f"""
     <div id="usability-result" hx-swap-oob="true" hx-swap="outerHTML">
     <h4>상호작용성 점수: {total_score}</h4>
@@ -79,23 +70,15 @@ def interactivity():
 
 @app.route("/fig/graph", methods=["GET"])
 def get_graph():
-    file_path = (os.path.dirname(os.path.realpath(__file__)) + "/../" +
-                 "(0724)(on_move) result_human.csv")
-    evaluate_file_path = (os.path.dirname(os.path.realpath(__file__)) +
-                          "/../" + "Evaluation_Table2.csv")
+    file_path = os.path.dirname(os.path.realpath(__file__)) + "/../" + 'interaction_control_node_1.csv'
     df = pd.read_csv(file_path)
+    df = map_motion_percent(df)
+    df = df.sort_values('Motion')
+
+    evaluate_file_path = os.path.dirname(os.path.realpath(__file__)) + "/../" + 'Evaluation_Table2.csv' 
     df_evaluate = pd.read_csv(evaluate_file_path)
 
-    # N번 사람 비교
-    df_number = df[df["Number"] == 10]
-    df_number = compare_value(df_number)
-
-    column_values = df_number["Filtered_Score"]
-    total_score = column_values.mean()
-
-    print("Interactivitiy Score is " + str(total_score))
-
-    img = combined_torques_graph(df_number, df_evaluate)
+    img = combined_torques_graph(df, df_evaluate)
     return send_file(img, mimetype="image/png")
 
 
