@@ -63,7 +63,7 @@ def interactivity():
     total_score = column_values.mean()
     return f"""
     <div id="usability-result" hx-swap-oob="true" hx-swap="outerHTML">
-    <h4>상호작용성 점수: {total_score}</h4>'
+    <h4>상호작용성 점수: {total_score}</h4>
     <div class="flex justify-center py-12">
     <img id="update-spinner" class="htmx-indicator" src="https://htmx.org/img/bars.svg"/ width=200>
     <img id="usability-result-fig" src="fig/graph"/>
