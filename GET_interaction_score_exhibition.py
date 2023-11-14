@@ -6,6 +6,8 @@ import os
 import glob
 from scipy.signal import butter, filtfilt
 
+from io import BytesIO
+
 def map_motion_percent (df):
     
     motion_table_file_path = 'motion_sequence2.csv'
@@ -88,7 +90,15 @@ def combined_torques_graph(df, df_evaluate):
     plt.legend(fontsize = 20)
 
     plt.tight_layout()  # 서브플롯 간의 간격 조정
-    plt.show()
+    #plt.show()
+
+    torquegraph_img = BytesIO()
+    plt.savefig(torquegraph_img, format='png', dpi=72)
+    plt.clf()
+    torquegraph_img.seek(0)
+
+    return torquegraph_img
+    
     
 def compare_value(df): 
     df['HumanTorque'] = df['HumanTorque'].abs()
